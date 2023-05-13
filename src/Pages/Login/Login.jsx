@@ -1,23 +1,28 @@
-import { Link } from "react-router-dom";
-import img from '../../assets/images/login/login.svg'
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import img from "../../assets/images/login/login.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const Login = () => {
-    const {signIn} = useContext(AuthContext)
-    const handleLogin = event => {
-        event.preventDefault()
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
-        signIn(email,password)
-        .then(result => {
-            console.log(result.user);
-        })
-        .catch(err => {
-            console.log(err.message);
-        })
-    }
+  const { signIn } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate()
+  const from = location.state?.from?.pathname || '/'
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    signIn(email, password)
+      .then((result) => {
+        console.log(result.user);
+        navigate(from,{replace: true})
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row">
